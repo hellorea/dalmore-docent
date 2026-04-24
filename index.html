@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>The Dalmore · Digital Docent</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#080604;--dark:#110e09;--panel:#1a1610;--card:#201c13;--gold:#c9a96e;--lgold:#dfc28f;--dgold:#8a6e3a;--cream:#f0e6d0;--muted:#8a7558;--dim:#4a3e2e;--white:#ffffff}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 2.5rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 30%,#1e1508 0%,var(--black) 70%)}
+.hero-stag{position:absolute;top:3rem;right:1.5rem;width:42vw;max-width:200px;opacity:.15;pointer-events:none}
+.hero-ring{position:absolute;top:2.5rem;right:1rem;width:48vw;max-width:220px;height:48vw;max-height:220px;border-radius:50%;border:0.5px solid var(--dgold);opacity:.3}
+.hero-ring2{position:absolute;top:calc(2.5rem + 3vw);right:calc(1rem + 3vw);width:42vw;max-width:194px;height:42vw;max-height:194px;border-radius:50%;border:0.5px solid var(--gold);opacity:.18}
+.hero-content{position:relative;padding:0 1.5rem}
+.hero-label{font-size:.62rem;letter-spacing:.35em;color:var(--gold);margin-bottom:.5rem}
+.hero-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(3rem,14vw,5rem);line-height:.95;color:var(--cream);margin-bottom:.6rem}
+.hero-rule{width:2rem;height:1px;background:var(--gold);margin-bottom:.8rem}
+.hero-sub{font-size:.65rem;letter-spacing:.2em;color:var(--muted);margin-bottom:.5rem}
+.hero-desc{font-size:.78rem;color:var(--dim);line-height:1.7;margin-bottom:2rem}
+.hero-cta{display:inline-flex;align-items:center;gap:.5rem;font-size:.65rem;letter-spacing:.2em;color:var(--gold);border:.5px solid var(--dgold);padding:.6rem 1.2rem;border-radius:2px;cursor:pointer;background:none;font-family:'Jost',sans-serif}
+.scroll-hint{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.3rem;opacity:.35;animation:bob 2.2s ease-in-out infinite}
+.scroll-hint span{font-size:.52rem;letter-spacing:.25em;color:var(--muted)}
+.scroll-arrow{width:1px;height:20px;background:linear-gradient(var(--dgold),transparent)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}55%{transform:translateX(-50%) translateY(5px)}}
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,6,4,.93);backdrop-filter:blur(12px);border-bottom:.5px solid rgba(201,169,110,.12);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 .4rem}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;padding:.85rem .85rem;font-family:'Jost',sans-serif;font-size:.58rem;font-weight:400;letter-spacing:.2em;color:var(--muted);background:none;border:none;border-bottom:1.5px solid transparent;cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.section{display:none;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.section-inner{padding:1.75rem 1.25rem 5rem}
+.sec-label{font-size:.56rem;letter-spacing:.32em;color:var(--gold);margin-bottom:.4rem}
+.sec-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2rem,9vw,2.8rem);line-height:1.05;color:var(--cream);margin-bottom:.7rem}
+.sec-rule{width:2rem;height:1px;background:var(--gold);margin-bottom:1rem}
+.sec-body{font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem}
+.prod-tabs{display:flex;gap:.35rem;overflow-x:auto;scrollbar-width:none;padding-bottom:.2rem;margin-bottom:1.2rem}
+.prod-tabs::-webkit-scrollbar{display:none}
+.prod-tab{flex-shrink:0;padding:.38rem .75rem;font-size:.55rem;letter-spacing:.15em;color:var(--muted);border:.5px solid var(--dim);border-radius:2px;cursor:pointer;background:none;transition:all .2s;font-family:'Jost',sans-serif}
+.prod-tab.active{color:var(--gold);border-color:var(--gold);background:rgba(201,169,110,.05)}
+.prod-card{background:var(--card);border:.5px solid var(--dim);border-radius:4px;overflow:hidden}
+.prod-top{height:3px}
+.prod-top.gold{background:var(--gold)}
+.prod-top.silver{background:linear-gradient(90deg,var(--dgold),var(--lgold),var(--dgold))}
+.prod-top.smoke{background:var(--muted)}
+.prod-body{padding:1.2rem}
+.prod-badge{display:inline-block;font-size:.52rem;letter-spacing:.15em;color:var(--dgold);border:.5px solid var(--dim);padding:.22rem .5rem;border-radius:2px;margin-bottom:.55rem}
+.prod-name{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.65rem;line-height:1.1;color:var(--cream);margin-bottom:.3rem}
+.prod-meta{font-size:.65rem;color:var(--dim);letter-spacing:.08em;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:.5rem .9rem}
+.t-grid{display:grid;grid-template-columns:1fr;gap:.5rem;margin-bottom:1rem}
+.t-box{background:var(--panel);border-radius:3px;padding:.75rem}
+.t-lbl{font-size:.52rem;letter-spacing:.28em;color:var(--gold);margin-bottom:.3rem}
+.t-txt{font-size:.76rem;color:var(--muted);line-height:1.65}
+.f-wrap{margin-bottom:1rem}
+.f-head{font-size:.52rem;letter-spacing:.25em;color:var(--dim);margin-bottom:.65rem}
+.f-row{display:flex;align-items:center;gap:.55rem;margin-bottom:.5rem}
+.f-key{font-size:.68rem;color:var(--muted);width:68px;flex-shrink:0}
+.f-track{flex:1;height:2.5px;background:var(--panel);border-radius:2px;overflow:hidden}
+.f-fill{height:100%;background:var(--gold);border-radius:2px;width:0;transition:width .85s cubic-bezier(.4,0,.2,1)}
+.f-val{font-size:.58rem;color:var(--dim);width:22px;text-align:right}
+.c-list{display:flex;flex-wrap:wrap;gap:.35rem}
+.c-tag{font-size:.58rem;color:var(--muted);border:.5px solid var(--dim);border-radius:2px;padding:.2rem .5rem;background:var(--panel)}
+.ba-card{background:var(--panel);border:.5px solid var(--dgold);border-radius:4px;padding:1.25rem;margin-top:2rem;text-align:center}
+.ba-icon{width:2.5rem;height:2.5rem;border-radius:50%;background:var(--card);border:.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto .7rem}
+.ba-icon svg{width:1rem;height:1rem;stroke:var(--gold);fill:none}
+.ba-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--cream);margin-bottom:.3rem}
+.ba-desc{font-size:.7rem;color:var(--muted);line-height:1.65;margin-bottom:.9rem}
+.ba-btn{display:inline-block;font-size:.62rem;letter-spacing:.2em;color:var(--black);background:var(--gold);padding:.62rem 1.4rem;border-radius:2px;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-weight:400}
+.timeline{position:relative;padding-left:1.4rem}
+.timeline::before{content:'';position:absolute;left:.38rem;top:.5rem;bottom:.5rem;width:.5px;background:var(--dim)}
+.tl-item{position:relative;margin-bottom:1.6rem}
+.tl-dot{position:absolute;left:-1.15rem;top:.3rem;width:.52rem;height:.52rem;border-radius:50%;background:var(--gold);border:1.5px solid var(--black)}
+.tl-year{font-size:.55rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.2rem}
+.tl-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--cream);margin-bottom:.35rem}
+.tl-text{font-size:.76rem;color:var(--muted);line-height:1.7}
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:1.4rem}
+.fact-card{background:var(--card);border:.5px solid var(--dim);border-radius:4px;padding:.9rem}
+.fact-num{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:var(--gold);line-height:1}
+.fact-lbl{font-size:.6rem;color:var(--muted);margin-top:.2rem}
+.info-card{background:var(--card);border:.5px solid var(--dim);border-radius:4px;padding:1.1rem;margin-bottom:.7rem}
+.pair-item{border-left:1.5px solid var(--gold);padding:.55rem 0 .55rem .85rem;margin-bottom:1rem}
+.pair-name{font-size:.7rem;font-weight:400;color:var(--cream);margin-bottom:.22rem;letter-spacing:.05em}
+.pair-food{font-size:.74rem;color:var(--muted);line-height:1.6}
+footer{text-align:center;padding:1.5rem 1.25rem 2.5rem;border-top:.5px solid var(--dim)}
+.foot-brand{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--muted);letter-spacing:.18em;margin-bottom:.3rem}
+.foot-sub{font-size:.56rem;color:var(--dim);letter-spacing:.1em;margin-top:.2rem}
+</style>
+</head>
+<body>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-ring"></div><div class="hero-ring2"></div>
+  <div class="hero-stag">
+    <svg viewBox="0 0 160 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M80 175 L70 145 L48 132 L58 117 L53 96 L64 107 L68 90 L72 78 L76 65 L80 54 L84 65 L88 78 L92 90 L96 107 L107 96 L102 117 L112 132 L90 145 Z" fill="#c9a96e"/>
+      <path d="M64 107 L48 98 L40 86 L53 92" fill="#c9a96e" opacity=".75"/>
+      <path d="M96 107 L112 98 L120 86 L107 92" fill="#c9a96e" opacity=".75"/>
+      <path d="M72 78 L60 70 L56 56 L68 68" fill="#c9a96e" opacity=".6"/>
+      <path d="M88 78 L100 70 L104 56 L92 68" fill="#c9a96e" opacity=".6"/>
+      <ellipse cx="72" cy="185" rx="5" ry="9" fill="#c9a96e" opacity=".55"/>
+      <ellipse cx="88" cy="185" rx="5" ry="9" fill="#c9a96e" opacity=".55"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-label">THE DALMORE · DIGITAL DOCENT</div>
+    <div class="hero-title">Highland<br>Single<br>Malt</div>
+    <div class="hero-rule"></div>
+    <div class="hero-sub">SCOTLAND · EST. 1839</div>
+    <div class="hero-desc">Incheon International Airport<br>Duty Free Collection</div>
+    <button class="hero-cta" onclick="document.getElementById('main-nav').scrollIntoView({behavior:'smooth'});setTimeout(()=>showSection('collection',null),400)">
+      Explore Collection ↓
+    </button>
+  </div>
+  <div class="scroll-hint"><div class="scroll-arrow"></div><span>SCROLL</span></div>
+</section>
+
+<nav class="nav" id="main-nav">
+  <button class="nav-btn active" onclick="showSection('collection',this)">COLLECTION</button>
+  <button class="nav-btn" onclick="showSection('heritage',this)">HERITAGE</button>
+  <button class="nav-btn" onclick="showSection('distillery',this)">DISTILLERY</button>
+  <button class="nav-btn" onclick="showSection('pairing',this)">PAIRING</button>
+</nav>
+
+<div id="section-collection" class="section active">
+<div class="section-inner">
+  <div class="sec-label">INCHEON DUTY FREE</div>
+  <div class="sec-title">Five<br>Expressions</div>
+  <div class="sec-rule"></div>
+  <div class="sec-body">Each bottle a distinct chapter in The Dalmore's 180-year mastery of cask curation.</div>
+  <div class="prod-tabs" id="prod-tabs">
+    <button class="prod-tab active" onclick="showProduct(0)">ANTHOLOGY 13</button>
+    <button class="prod-tab" onclick="showProduct(1)">ANTHOLOGY 16</button>
+    <button class="prod-tab" onclick="showProduct(2)">ANTHOLOGY 19</button>
+    <button class="prod-tab" onclick="showProduct(3)">KING ALEX III</button>
+    <button class="prod-tab" onclick="showProduct(4)">CIGAR MALT</button>
+  </div>
+  <div id="prod-display"></div>
+  <div class="ba-card">
+    <div class="ba-icon"><svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="ba-title">Speak with our Brand Ambassador</div>
+    <div class="ba-desc">Our seasoned BA team is here to guide your selection and share the full story behind each expression.</div>
+    <button class="ba-btn">CALL A BA</button>
+  </div>
+</div>
+</div>
+
+<div id="section-heritage" class="section">
+<div class="section-inner">
+  <div class="sec-label">THE STORY</div>
+  <div class="sec-title">A Legacy<br>Born in 1263</div>
+  <div class="sec-rule"></div>
+  <div class="sec-body">Seven centuries of honour, craft and cask mastery — distilled into every bottle.</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1263</div><div class="tl-title">The Legend of the Stag</div><div class="tl-text">Colin Fitzgerald of Clan Mackenzie saved King Alexander III from a charging stag with a single arrow. The king granted the Mackenzies the right to bear the stag's head — the emblem on every bottle to this day.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1839</div><div class="tl-title">Distillery Founded</div><div class="tl-text">Alexander Matheson established The Dalmore on the northern shores of the Cromarty Firth. Pure spring waters and cool Highland air became the foundation of its singular spirit character.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1960s</div><div class="tl-title">The Paterson Era</div><div class="tl-text">Master Distiller Richard Paterson pioneered The Dalmore's rare cask finishing philosophy — forging relationships with the world's finest sherry bodegas, port houses and wineries.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">TODAY</div><div class="tl-title">Global Travel Retail Icon</div><div class="tl-text">The 3rd largest luxury malt brand in global travel retail. Exclusive collections crafted for the discerning international traveller — available here at Incheon International Airport.</div></div>
+  </div>
+</div>
+</div>
+
+<div id="section-distillery" class="section">
+<div class="section-inner">
+  <div class="sec-label">THE CRAFT</div>
+  <div class="sec-title">Alness,<br>Scotland</div>
+  <div class="sec-rule"></div>
+  <div class="sec-body">Where the Cromarty Firth meets the Highland air — pure waters, deep history.</div>
+  <div class="fact-grid">
+    <div class="fact-card"><div class="fact-num">1839</div><div class="fact-lbl">Year founded</div></div>
+    <div class="fact-card"><div class="fact-num">180+</div><div class="fact-lbl">Years of craft</div></div>
+    <div class="fact-card"><div class="fact-num">6</div><div class="fact-lbl">Casks — King Alexander III</div></div>
+    <div class="fact-card"><div class="fact-num">#3</div><div class="fact-lbl">Luxury malt, global TR</div></div>
+  </div>
+  <div class="info-card"><div class="t-lbl" style="margin-bottom:.4rem">REGION</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--cream);margin-bottom:.4rem">Northern Highlands, Scotland</div><div class="t-txt">Located in Alness, overlooking the Cromarty Firth. Unique flat-topped wash stills and taller spirit stills create The Dalmore's signature rich, oily character.</div></div>
+  <div class="info-card"><div class="t-lbl" style="margin-bottom:.4rem">HOUSE STYLE</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--cream);margin-bottom:.4rem">Rich · Sherried · Citrus-led</div><div class="t-txt">Dark chocolate, Seville orange, warm spice and toffee define the unmistakable profile. All expressions begin in American white oak before finishing in rare, hand-selected casks sourced globally.</div></div>
+  <div class="info-card"><div class="t-lbl" style="margin-bottom:.5rem">SIGNATURE FLAVOURS</div><div class="c-list"><span class="c-tag">Dark Chocolate</span><span class="c-tag">Seville Orange</span><span class="c-tag">Warm Spice</span><span class="c-tag">Toffee</span><span class="c-tag">Roasted Coffee</span><span class="c-tag">Rich Sherry</span><span class="c-tag">Dried Fruit</span></div></div>
+</div>
+</div>
+
+<div id="section-pairing" class="section">
+<div class="section-inner">
+  <div class="sec-label">EXPERIENCE GUIDE</div>
+  <div class="sec-title">The Art of<br>Pairing</div>
+  <div class="sec-rule"></div>
+  <div class="sec-body">The Dalmore's rich chocolate-and-citrus character finds its natural companions below.</div>
+  <div class="pair-item"><div class="pair-name">ANTHOLOGY 13 YO PX · 43%</div><div class="pair-food">Dark chocolate truffles · Candied orange peel · PX sherry cake · Medjool dates</div></div>
+  <div class="pair-item"><div class="pair-name">ANTHOLOGY 16 YO PX · 46%</div><div class="pair-food">Christmas pudding · Spiced fruit cake · Aged manchego · Prune and almond tart</div></div>
+  <div class="pair-item"><div class="pair-name">ANTHOLOGY 19 YO PX · 47%</div><div class="pair-food">Foie gras · Black truffle · Single-origin 80% dark chocolate · Aged blue cheese</div></div>
+  <div class="pair-item" style="border-left-color:var(--lgold)"><div class="pair-name">KING ALEXANDER III TRX · 40%</div><div class="pair-food">Marzipan · Dried figs · Crème brûlée · Grand Marnier soufflé · Glazed nuts</div></div>
+  <div class="pair-item" style="border-left-color:var(--muted)"><div class="pair-name">CIGAR MALT RESERVE · 44%</div><div class="pair-food">Robusto or Churchill cigar · Bitter espresso · Dark chocolate ganache · Aged hard cheese</div></div>
+  <div class="info-card" style="margin-top:1.5rem"><div class="t-lbl" style="margin-bottom:.4rem">SERVING SUGGESTION</div><div class="t-txt">Serve neat at room temperature, or with a few drops of still water to open the nose. Avoid ice — it mutes The Dalmore's signature cask complexity. A tulip or Glencairn glass is ideal.</div></div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-brand">THE DALMORE</div>
+  <div class="foot-sub">HIGHLAND SINGLE MALT SCOTCH WHISKY · EST. 1839</div>
+  <div class="foot-sub">PER DF · Incheon International Airport</div>
+</footer>
+
+<script>
+const products=[
+  {id:0,top:'gold',badge:'TRAVEL RETAIL EXCLUSIVE',name:'Anthology',sub:'13 Year Old',meta:['43% ABV','Pedro Ximénez Finish','Travel Exclusive'],nose:'Sweet sherry, dried fig, raisin, Seville orange and warm toffee',palate:'Rich PX sweetness, dark berry, spiced chocolate and gentle oak',finish:'Velvety and long — caramel, dried fruit, lingering warmth',flavors:[{k:'Sweetness',v:88},{k:'Richness',v:82},{k:'Fruit',v:78},{k:'Spice',v:48},{k:'Oak',v:42}],casks:['Pedro Ximénez Sherry','American White Oak','Ex-Bourbon']},
+  {id:1,top:'gold',badge:'TRAVEL RETAIL EXCLUSIVE',name:'Anthology',sub:'16 Year Old',meta:['46% ABV','Pedro Ximénez Finish','Travel Exclusive'],nose:'Dark plum, Christmas cake, molasses, orange zest, roasted nuts',palate:'Intense sherry richness, prune, bittersweet chocolate, warm cinnamon',finish:'Deep and complex — fig, dark fruit, lingering warmth',flavors:[{k:'Sweetness',v:82},{k:'Richness',v:88},{k:'Fruit',v:80},{k:'Spice',v:62},{k:'Oak',v:55}],casks:['Pedro Ximénez Sherry','American White Oak','Extended Maturation']},
+  {id:2,top:'gold',badge:'TRAVEL RETAIL EXCLUSIVE',name:'Anthology',sub:'19 Year Old',meta:['47% ABV','Pedro Ximénez Finish','Travel Exclusive'],nose:'Aged balsamic, dried cherry, tobacco leaf, leather, deep Oloroso',palate:'Black fruit, dark chocolate, espresso, beautifully integrated oak',finish:'Exceptionally long — treacle, roasted coffee, leather, exotic spice',flavors:[{k:'Sweetness',v:72},{k:'Richness',v:92},{k:'Fruit',v:70},{k:'Spice',v:75},{k:'Oak',v:80}],casks:['Pedro Ximénez Sherry','American White Oak','Long Maturation']},
+  {id:3,top:'silver',badge:"TRAVELLER'S EXCLUSIVE",name:'King Alexander III',sub:'Travel Retail Exclusive',meta:['40% ABV','Six Noble Casks','NAS'],nose:'Red berry fruits, hints of passion fruit, sweet spice and rich cacao',palate:'Citrus zest, vanilla pod, crème caramel, crushed almonds, tropical fruit',finish:'Cinnamon, nutmeg, ginger — long and velvety with lingering warmth',flavors:[{k:'Sweetness',v:80},{k:'Richness',v:88},{k:'Fruit',v:85},{k:'Spice',v:55},{k:'Oak',v:60}],casks:['Bourbon','Matusalem Oloroso','Sauternes','Amarone','Port Pipes','Portuguese Red']},
+  {id:4,top:'smoke',badge:'SPECIALTY EXPRESSION',name:'Cigar Malt',sub:'Reserve',meta:['44% ABV','Oloroso Sherry','NAS'],nose:'Roasted coffee, bitter chocolate, leather, dried tobacco, bold oak',palate:'Espresso, dark cacao, Oloroso sherry richness, sharp spice, dried fruits',finish:'Bold and lingering — dark chocolate, coffee, subtle sweet oak',flavors:[{k:'Roast',v:90},{k:'Chocolate',v:85},{k:'Sherry',v:80},{k:'Spice',v:78},{k:'Fruit',v:55}],casks:['American White Oak','Oloroso Sherry','Extended Maturation']}
+];
+
+function showProduct(i){
+  document.querySelectorAll('.prod-tab').forEach((b,j)=>b.classList.toggle('active',j===i));
+  const p=products[i];
+  document.getElementById('prod-display').innerHTML=`
+<div class="prod-card">
+  <div class="prod-top ${p.top}"></div>
+  <div class="prod-body">
+    <div class="prod-badge">${p.badge}</div>
+    <div class="prod-name">${p.name}<br><span style="color:var(--gold)">${p.sub}</span></div>
+    <div class="prod-meta">${p.meta.map(m=>`<span>${m}</span>`).join('')}</div>
+    <div class="t-grid">
+      <div class="t-box"><div class="t-lbl">NOSE</div><div class="t-txt">${p.nose}</div></div>
+      <div class="t-box"><div class="t-lbl">PALATE</div><div class="t-txt">${p.palate}</div></div>
+      <div class="t-box"><div class="t-lbl">FINISH</div><div class="t-txt">${p.finish}</div></div>
+    </div>
+    <div class="f-wrap">
+      <div class="f-head">FLAVOUR INTENSITY</div>
+      ${p.flavors.map(f=>`<div class="f-row"><span class="f-key">${f.k}</span><div class="f-track"><div class="f-fill" data-v="${f.v}"></div></div><span class="f-val">${f.v}</span></div>`).join('')}
+    </div>
+    <div class="t-lbl" style="margin-bottom:.45rem">CASK MATURATION</div>
+    <div class="c-list">${p.casks.map(c=>`<span class="c-tag">${c}</span>`).join('')}</div>
+  </div>
+</div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll('.f-fill').forEach(el=>el.style.width=el.dataset.v+'%');
+  }));
+}
+
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  else document.querySelector(`[onclick*="${id}"]`)?.classList.add('active');
+}
+
+showProduct(0);
+</script>
+</body>
+</html>
